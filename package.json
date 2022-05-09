@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "moment": "^2.29.3",
     "node-fetch": "^3.2.4",
     "telegraf": "^4.8.1"
   }
