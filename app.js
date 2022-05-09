@@ -1,9 +1,10 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import { Telegraf } from 'telegraf'
 import fetch from 'node-fetch'
-import moment from 'moment';
+import moment from 'moment'
 
-const BOT_TOKEN = '5372911011:AAHk0VeTdplzPNElB6avZhQj1BJcXNFitcY';
-const bot = new Telegraf(BOT_TOKEN)
+const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
 let url = 'https://api.opendota.com/api/players/110236540/recentMatches'
 let wordurl = 'https://api.opendota.com/api/players/110236540/wordcloud'
 
