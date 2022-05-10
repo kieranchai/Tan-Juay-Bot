@@ -35,6 +35,7 @@ bot.on('photo', async (ctx) => {
             return new Promise((resolve, reject) => {
                 response.data.pipe(fs.createWriteStream(path1))
                     .on('finish', () => {
+                        console.log(path1)
                         // model.classify({
                         //     imageUrl: path1,
                         // }).then((predictions) => {
