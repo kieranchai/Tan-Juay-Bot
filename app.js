@@ -9,19 +9,7 @@ let url = 'https://api.opendota.com/api/players/110236540/recentMatches'
 let wordurl = 'https://api.opendota.com/api/players/110236540/wordcloud'
 
 //BOT COMMANDS
-// bot.start((ctx) => ctx.reply("Hello, I'm Tan Juay Hee."))
-bot.command("start", (ctx) => {
-    ctx.reply("Hello, I'm Tan Juay Hee. Please select an option below to get started!", {
-        reply_markup: {
-            inline_keyboard: [
-                /* Inline buttons. 2 side-by-side */
-                [{ text: "U playing?", callback_data: "u playing?" }, { text: "Button 2", callback_data: "btn-2" }],
-                /* Also, we can have URL buttons. */
-                [{ text: "Open in browser", url: "telegraf.js.org" }]
-            ]
-        }
-    })
-})
+bot.start((ctx) => ctx.reply("Hello, I'm Tan Juay Hee. Please ask whether I'm playing to get started!"))
 
 bot.hears('u playing?', async (ctx) =>
     fetch(url).then((res) => res.json()).then((data) => {
@@ -40,15 +28,6 @@ bot.hears('u playing?', async (ctx) =>
         ctx.reply("I last played " + timeAgo + " and I " + juayResult)
     })
 )
-
-bot.hears('selfie leh', async (ctx) => {
-    ctx.replyWithPhoto({ source: 'assets/juayselfie.jpg' }, { caption: "yup sphee" })
-})
-
-bot.hears('bulge pls', async (ctx) => {
-    ctx.replyWithPhoto({ source: 'assets/juaydp.jpg' }, { caption: "nice?" })
-
-})
 
 bot.hears('word', async (ctx) => {
     fetch(wordurl).then((res) => res.json()).then((data) => {
