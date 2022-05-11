@@ -6,11 +6,14 @@ import moment from 'moment'
 import { Markup } from 'telegraf'
 import nodeCron from 'node-cron'
 
-const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
 let url = 'https://api.opendota.com/api/players/110236540/recentMatches'
 let wordurl = 'https://api.opendota.com/api/players/110236540/wordcloud'
+let quotesurl = 'https://zenquotes.io/api/quotes'
 let task
+const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
+
 //BOT COMMANDS
+
 
 bot.command('/alarmOn', (ctx) => {
     if (!task) {
@@ -44,12 +47,26 @@ bot.start((ctx) => {
     ctx.reply(message, {
         ...Markup.inlineKeyboard([
             //First column
-            [Markup.button.callback('R u playing', 'R u playing'),
-            Markup.button.callback('Last Match', 'Last Match'),],
-            [Markup.button.callback('Word', 'Word'),
+            [Markup.button.callback('Last Match', 'Last Match'),],
+            [Markup.button.callback('Sentence', 'Sentence'),
             Markup.button.callback('Bulge', 'Bulge'),],
         ])
     })
+})
+
+bot.on('text', async (ctx) => {
+    if ((ctx.message.text).includes('?')) {
+        fetch(quotesurl).then((res) => res.json()).then((data) => {
+            let quoteCloud = data
+            const randomQuote = quoteCloud[Math.floor(Math.random() * quoteCloud.length)];
+            bot.telegram.sendMessage(ctx.chat.id, randomQuote.q)
+        })
+    }
+    if (((ctx.message.text).toLowerCase()).includes('play')) {
+        let answerArray = ['Ok play lo any niggins', 'Nah watchin anime', 'Maybe maybe not y dont u suck my dick first and well see']
+        const randomAnswer = answerArray[Math.floor(Math.random() * answerArray.length)];
+        ctx.reply(randomAnswer)
+    }
 })
 
 bot.action('Last Match', async (ctx) =>
@@ -76,7 +93,7 @@ bot.action('Bulge', async (ctx) => {
     ctx.replyWithPhoto({ source: 'assets/juaydp.jpg' }, { caption: "Don't be sad, have a bulge." })
 })
 
-bot.action('Word', async (ctx) => {
+bot.action('Sentence', async (ctx) => {
     fetch(wordurl).then((res) => res.json()).then((data) => {
         let wordCloud = data.my_word_counts
         let keyNames = Object.keys(wordCloud)
@@ -95,11 +112,6 @@ bot.action('Word', async (ctx) => {
     })
 })
 
-bot.action('R u playing', async (ctx) => {
-    let answerArray = ['Ok Niggin lo', 'Nah watchin anime', 'Maybe']
-    const randomAnswer = answerArray[Math.floor(Math.random() * answerArray.length)];
-    ctx.reply(randomAnswer)
-})
 bot.launch()
 
 process.once('SIGINT', () => bot.stop('SIGINT'))
