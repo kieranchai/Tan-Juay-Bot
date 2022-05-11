@@ -7,7 +7,6 @@ import { Markup } from 'telegraf'
 import nodeCron from 'node-cron'
 
 let url = 'https://api.opendota.com/api/players/110236540/'
-let heroNamesUrl = 'https://raw.githubusercontent.com/odota/dotaconstants/master/build/hero_names.json'
 let task
 const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
 
@@ -112,14 +111,10 @@ bot.action('Match Details', async (ctx) => {
     fetch(url + 'recentMatches').then((res) => res.json()).then((data) => {
         let juayHero = data[0].hero_id
         let juayHeroName
-        fetch(heroNamesUrl).then((res) => res.json()).then((data) => {
-            let heroArray = data
-            juayHeroName = data[juayHero - 1].localized_name
-        })
         let juayKills = data[0].kills
         let juayDeaths = data[0].deaths
         let juayAssists = data[0].assists
-        ctx.reply("<b>" + juayHeroName + "</b>\n" + "Kills: " + juayKills + "\n"
+        ctx.reply("Kills: " + juayKills + "\n"
             + "Deaths: " + juayDeaths + "\n"
             + "Assists: " + juayAssists, {
             parse_mode: 'HTML'
