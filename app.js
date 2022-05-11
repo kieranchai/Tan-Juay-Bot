@@ -6,8 +6,8 @@ import moment from 'moment'
 import { Markup } from 'telegraf'
 import nodeCron from 'node-cron'
 
-let url = 'https://api.opendota.com/api/players/110236540/recentMatches'
-let wordurl = 'https://api.opendota.com/api/players/110236540/wordcloud'
+let url = 'https://api.opendota.com/api/players/110236540/'
+let heroNamesUrl = 'https://raw.githubusercontent.com/odota/dotaconstants/master/build/hero_names.json'
 let task
 const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
 
@@ -15,7 +15,9 @@ const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
 bot.command('/alarmOn', (ctx) => {
     if (!task) {
         task = nodeCron.schedule('0 30 17 * * *', () => {
-            ctx.reply('ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!')
+            ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+            ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+            ctx.replyWithAudio({source: `assets/alarm.mp3`})
         }, {
             scheduled: false,
             timezone: "Asia/Singapore"
@@ -59,7 +61,7 @@ bot.on('text', async (ctx) => {
 })
 
 bot.action('Last Match', async (ctx) =>
-    fetch(url).then((res) => res.json()).then((data) => {
+    fetch(url+'recentMatches').then((res) => res.json()).then((data) => {
         let juayResult
         let matchDt = new Date(data[0].start_time * 1000)
         let timeAgo = moment(matchDt).fromNow()
@@ -106,17 +108,17 @@ bot.action('Last Match', async (ctx) =>
 )
 
 bot.action('Match Details', async (ctx) => {
-    fetch(url).then((res) => res.json()).then((data) => {
+    fetch(url+'recentMatches').then((res) => res.json()).then((data) => {
         let juayHero = data[0].hero_id
         let juayHeroName
-        fetch('https://raw.githubusercontent.com/odota/dotaconstants/master/build/hero_names.json').then((res) => res.json()).then((data) => {
+        fetch(heroNamesUrl).then((res) => res.json()).then((data) => {
             let heroArray = data
-            juayHeroName = data[juayHero-1].localized_name
+            juayHeroName = data[juayHero - 1].localized_name
         })
         let juayKills = data[0].kills
         let juayDeaths = data[0].deaths
         let juayAssists = data[0].assists
-        ctx.reply("<b>"+ juayHeroName+"</b>\n"+ "Kills: " + juayKills + "\n"
+        ctx.reply("<b>" + juayHeroName + "</b>\n" + "Kills: " + juayKills + "\n"
             + "Deaths: " + juayDeaths + "\n"
             + "Assists: " + juayAssists, {
             parse_mode: 'HTML'
@@ -129,7 +131,7 @@ bot.action('Bulge', async (ctx) => {
 })
 
 bot.action('Sentence', async (ctx) => {
-    fetch(wordurl).then((res) => res.json()).then((data) => {
+    fetch(url+'wordcloud').then((res) => res.json()).then((data) => {
         let wordCloud = data.my_word_counts
         let keyNames = Object.keys(wordCloud)
         let randomProperty = (obj) => {
