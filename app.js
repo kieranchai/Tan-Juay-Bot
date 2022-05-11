@@ -107,10 +107,16 @@ bot.action('Last Match', async (ctx) =>
 
 bot.action('Match Details', async (ctx) => {
     fetch(url).then((res) => res.json()).then((data) => {
+        let juayHero = data[0].hero_id
+        let juayHeroName
+        fetch('https://raw.githubusercontent.com/odota/dotaconstants/master/build/hero_names.json').then((res) => res.json()).then((data) => {
+            let heroArray = data
+            juayHeroName = data[juayHero-1].localized_name
+        })
         let juayKills = data[0].kills
         let juayDeaths = data[0].deaths
         let juayAssists = data[0].assists
-        ctx.reply("Kills: " + juayKills + "\n"
+        ctx.reply("<b>"+ juayHeroName+"</b>\n"+ "Kills: " + juayKills + "\n"
             + "Deaths: " + juayDeaths + "\n"
             + "Assists: " + juayAssists, {
             parse_mode: 'HTML'
