@@ -8,13 +8,10 @@ import nodeCron from 'node-cron'
 
 let url = 'https://api.opendota.com/api/players/110236540/recentMatches'
 let wordurl = 'https://api.opendota.com/api/players/110236540/wordcloud'
-let quotesurl = 'https://zenquotes.io/api/quotes'
 let task
 const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
 
 //BOT COMMANDS
-
-
 bot.command('/alarmOn', (ctx) => {
     if (!task) {
         task = nodeCron.schedule('0 30 17 * * *', () => {
@@ -46,7 +43,6 @@ bot.start((ctx) => {
     let message = `Hello master ${userFirstName}, I am Tan Juay Hee your humble servant.`
     ctx.reply(message, {
         ...Markup.inlineKeyboard([
-            //First column
             [Markup.button.callback('Last Match', 'Last Match'),],
             [Markup.button.callback('Sentence', 'Sentence'),
             Markup.button.callback('Bulge', 'Bulge'),],
@@ -55,13 +51,6 @@ bot.start((ctx) => {
 })
 
 bot.on('text', async (ctx) => {
-    if ((ctx.message.text).includes('?')) {
-        fetch(quotesurl).then((res) => res.json()).then((data) => {
-            let quoteCloud = data
-            const randomQuote = quoteCloud[Math.floor(Math.random() * quoteCloud.length)];
-            bot.telegram.sendMessage(ctx.chat.id, randomQuote.q)
-        })
-    }
     if (((ctx.message.text).toLowerCase()).includes('play')) {
         let answerArray = ['Ok play lo any niggins', 'Nah watchin anime', 'Maybe maybe not y dont u suck my dick first and well see']
         const randomAnswer = answerArray[Math.floor(Math.random() * answerArray.length)];
@@ -85,9 +74,49 @@ bot.action('Last Match', async (ctx) =>
         } else if (data[0].radiant_win == false && data[0].player_slot >= 128) {
             juayResult = "won"
         }
-        ctx.reply("I last played " + "<b>" + timeAgo + "</b>" + " and I " + juayResult + " after " + juayDuration + " minutes.", { parse_mode: 'HTML' })
-    })
+        ctx.reply("I last played " + "<b>" + timeAgo + "</b>" + " and I " + juayResult + " after " + juayDuration + " minutes.",
+            {
+                ...Markup.inlineKeyboard([
+                    [Markup.button.callback('Match Details', 'Match Details'),]
+                ]),
+                parse_mode: 'HTML'
+            })
+        let winstreak = 0
+        let losestreak = 0
+        for (var i = 0; i < 15; i++) {
+            if (data[i].radiant_win == true && data[i].player_slot < 128 || data[i].radiant_win == false && data[i].player_slot >= 128) {
+                winstreak++
+            } else {
+                break;
+            }
+        }
+        for (var i = 0; i < 15; i++) {
+            if (data[i].radiant_win == true && data[i].player_slot >= 128 || data[i].radiant_win == false && data[i].player_slot < 128) {
+                losestreak++
+            } else {
+                break;
+            }
+        }
+        if (winstreak > 0) {
+            ctx.reply("Damn bruh, i'm on a " + winstreak + " winstreak.")
+        } else {
+            ctx.reply("Damn bruh, i'm on a " + losestreak + " losestreak.")
+        }
+    }),
 )
+
+bot.action('Match Details', async (ctx) => {
+    fetch(url).then((res) => res.json()).then((data) => {
+        let juayKills = data[0].kills
+        let juayDeaths = data[0].deaths
+        let juayAssists = data[0].assists
+        ctx.reply("Kills: " + juayKills + "\n"
+            + "Deaths: " + juayDeaths + "\n"
+            + "Assists: " + juayAssists, {
+            parse_mode: 'HTML'
+        })
+    })
+})
 
 bot.action('Bulge', async (ctx) => {
     ctx.replyWithPhoto({ source: 'assets/juaydp.jpg' }, { caption: "Don't be sad, have a bulge." })
