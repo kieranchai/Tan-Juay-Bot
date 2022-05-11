@@ -17,7 +17,8 @@ bot.command('/alarmOn', (ctx) => {
         task = nodeCron.schedule('0 30 17 * * *', () => {
             ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
             ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
-            ctx.replyWithAudio({source: `assets/alarm.mp3`})
+            // ctx.replyWithVoice({ source: `assets/alarm.ogg` })
+            bot.telegram.sendVideoNote(ctx.message.chat.id, { source: `assets/alarm.mp4` })
         }, {
             scheduled: false,
             timezone: "Asia/Singapore"
@@ -61,7 +62,7 @@ bot.on('text', async (ctx) => {
 })
 
 bot.action('Last Match', async (ctx) =>
-    fetch(url+'recentMatches').then((res) => res.json()).then((data) => {
+    fetch(url + 'recentMatches').then((res) => res.json()).then((data) => {
         let juayResult
         let matchDt = new Date(data[0].start_time * 1000)
         let timeAgo = moment(matchDt).fromNow()
@@ -108,7 +109,7 @@ bot.action('Last Match', async (ctx) =>
 )
 
 bot.action('Match Details', async (ctx) => {
-    fetch(url+'recentMatches').then((res) => res.json()).then((data) => {
+    fetch(url + 'recentMatches').then((res) => res.json()).then((data) => {
         let juayHero = data[0].hero_id
         let juayHeroName
         fetch(heroNamesUrl).then((res) => res.json()).then((data) => {
@@ -131,7 +132,7 @@ bot.action('Bulge', async (ctx) => {
 })
 
 bot.action('Sentence', async (ctx) => {
-    fetch(url+'wordcloud').then((res) => res.json()).then((data) => {
+    fetch(url + 'wordcloud').then((res) => res.json()).then((data) => {
         let wordCloud = data.my_word_counts
         let keyNames = Object.keys(wordCloud)
         let randomProperty = (obj) => {
