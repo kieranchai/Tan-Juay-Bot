@@ -6,9 +6,29 @@ import moment from 'moment'
 import { Markup } from 'telegraf'
 import nodeCron from 'node-cron'
 
+//VARIABLES
 let url = 'https://api.opendota.com/api/players/110236540/'
-let task
 const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
+let task
+let juayHeroName
+
+//FUNCTIONS
+function binarySearch(sortedArray, key) {
+    let start = 0;
+    let end = sortedArray.length - 1;
+    while (start <= end) {
+        let middle = Math.floor((start + end) / 2);
+        if (sortedArray[middle].id === key) {
+            juayHeroName = (sortedArray[middle].localized_name);
+            break;
+        } else if (sortedArray[middle].id < key) {
+            start = middle + 1;
+        } else {
+            end = middle - 1;
+        }
+    }
+    return;
+}
 
 //BOT COMMANDS
 bot.command('/alarmOn', (ctx) => {
@@ -108,13 +128,19 @@ bot.action('Last Match', async (ctx) =>
 )
 
 bot.action('Match Details', async (ctx) => {
+    let juayHero
+    let juayKills
+    let juayDeaths
+    let juayAssists
     fetch(url + 'recentMatches').then((res) => res.json()).then((data) => {
-        let juayHero = data[0].hero_id
-        let juayHeroName
-        let juayKills = data[0].kills
-        let juayDeaths = data[0].deaths
-        let juayAssists = data[0].assists
-        ctx.reply("Kills: " + juayKills + "\n"
+        juayHero = data[0].hero_id
+        juayKills = data[0].kills
+        juayDeaths = data[0].deaths
+        juayAssists = data[0].assists
+    }).then(fetch('https://api.opendota.com/api/heroes').then((res) => res.json()).then((data) => {
+        binarySearch(data, juayHero)
+    })).then(() => {
+        ctx.reply("<b>" + juayHeroName + "</b> \n" + "Kills: " + juayKills + "\n"
             + "Deaths: " + juayDeaths + "\n"
             + "Assists: " + juayAssists, {
             parse_mode: 'HTML'
