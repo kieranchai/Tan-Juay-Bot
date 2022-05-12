@@ -137,7 +137,7 @@ bot.action('Match Details', async (ctx) => {
         juayKills = data[0].kills
         juayDeaths = data[0].deaths
         juayAssists = data[0].assists
-    }).then(fetch('https://api.opendota.com/api/heroes').then((res) => res.json()).then((data) => {
+    }).then(await fetch('https://api.opendota.com/api/heroes').then((res) => res.json()).then((data) => {
         binarySearch(data, juayHero)
     })).then(() => {
         ctx.reply("<b>" + juayHeroName + "</b> \n" + "Kills: " + juayKills + "\n"
