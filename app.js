@@ -5,15 +5,18 @@ import fetch from 'node-fetch'
 import moment from 'moment'
 import { Markup } from 'telegraf'
 import nodeCron from 'node-cron'
+import say from 'say'
 
 //VARIABLES
 let url = 'https://api.opendota.com/api/players/110236540/'
 const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
 let task
+let taskNow
 let juayHeroName
 
 //FUNCTIONS
 function binarySearch(sortedArray, key) {
+    console.log(sortedArray + "key" + key)
     let start = 0;
     let end = sortedArray.length - 1;
     while (start <= end) {
@@ -31,6 +34,26 @@ function binarySearch(sortedArray, key) {
 }
 
 //BOT COMMANDS
+bot.command('/alarmNow', (ctx) => {
+    if (!taskNow) {
+        ctx.reply('Game Alarm every 10 seconds has been turned on.')
+        taskNow = nodeCron.schedule('*/10 * * * * *', () => {
+            ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+            ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+            ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+        }, {
+            scheduled: false,
+            timezone: "Asia/Singapore"
+        })
+        taskNow.start()
+    } else {
+        taskNow.stop()
+        taskNow = undefined
+        ctx.reply('Game Alarm has been turned off.')
+    }
+
+})
+
 bot.command('/alarmOn', (ctx) => {
     if (!task) {
         task = nodeCron.schedule('0 30 17 * * *', () => {
@@ -77,6 +100,14 @@ bot.on('text', async (ctx) => {
         let answerArray = ['Ok play lo any niggins', 'Nah watchin anime', 'Maybe maybe not y dont u suck my dick first and well see']
         const randomAnswer = answerArray[Math.floor(Math.random() * answerArray.length)];
         ctx.reply(randomAnswer)
+    }
+    if (((ctx.message.text).toLowerCase()).includes('/tts') && (ctx.message.text).length > 4) {
+        say.export(((ctx.message.text).substring(4)), '', 1, 'assets/audio.wav', (err) => {
+            if (err) {
+                return console.error(err)
+            }
+            ctx.replyWithVoice({ source: `assets/audio.wav` })
+        })
     }
 })
 
@@ -132,7 +163,7 @@ bot.action('Match Details', async (ctx) => {
     let juayKills
     let juayDeaths
     let juayAssists
-    fetch(url + 'recentMatches').then((res) => res.json()).then((data) => {
+    await fetch(url + 'recentMatches').then((res) => res.json()).then((data) => {
         juayHero = data[0].hero_id
         juayKills = data[0].kills
         juayDeaths = data[0].deaths
@@ -140,6 +171,7 @@ bot.action('Match Details', async (ctx) => {
     }).then(await fetch('https://api.opendota.com/api/heroes').then((res) => res.json()).then((data) => {
         binarySearch(data, juayHero)
     })).then(() => {
+        console.log(juayHeroName + juayKills)
         ctx.reply("<b>" + juayHeroName + "</b> \n" + "Kills: " + juayKills + "\n"
             + "Deaths: " + juayDeaths + "\n"
             + "Assists: " + juayAssists, {
