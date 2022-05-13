@@ -5,7 +5,6 @@ import fetch from 'node-fetch'
 import moment from 'moment'
 import { Markup } from 'telegraf'
 import nodeCron from 'node-cron'
-import say from 'say'
 
 //VARIABLES
 let url = 'https://api.opendota.com/api/players/110236540/'
@@ -100,14 +99,6 @@ bot.on('text', async (ctx) => {
         let answerArray = ['Ok play lo any niggins', 'Nah watchin anime', 'Maybe maybe not y dont u suck my dick first and well see']
         const randomAnswer = answerArray[Math.floor(Math.random() * answerArray.length)];
         ctx.reply(randomAnswer)
-    }
-    if (((ctx.message.text).toLowerCase()).includes('/tts') && (ctx.message.text).length > 4) {
-        say.export(((ctx.message.text).substring(4)), '', 1, 'assets/audio.wav', (err) => {
-            if (err) {
-                return console.error(err)
-            }
-            ctx.replyWithVoice({ source: `assets/audio.wav` })
-        })
     }
 })
 
