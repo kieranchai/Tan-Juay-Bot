@@ -15,18 +15,17 @@ let juayHeroName
 
 //FUNCTIONS
 function binarySearch(sortedArray, key) {
-    console.log(sortedArray + "key" + key)
-    let start = 0;
-    let end = sortedArray.length - 1;
+    let start = 0
+    let end = sortedArray.length - 1
     while (start <= end) {
-        let middle = Math.floor((start + end) / 2);
+        let middle = Math.floor((start + end) / 2)
         if (sortedArray[middle].id === key) {
-            juayHeroName = (sortedArray[middle].localized_name);
-            break;
+            juayHeroName = (sortedArray[middle].localized_name)
+            break
         } else if (sortedArray[middle].id < key) {
-            start = middle + 1;
+            start = middle + 1
         } else {
-            end = middle - 1;
+            end = middle - 1
         }
     }
     return;
@@ -159,15 +158,14 @@ bot.action('Match Details', async (ctx) => {
         juayKills = data[0].kills
         juayDeaths = data[0].deaths
         juayAssists = data[0].assists
-    }).then(await fetch('https://api.opendota.com/api/heroes').then((res) => res.json()).then((data) => {
+    })
+    await fetch('https://api.opendota.com/api/heroes').then((res) => res.json()).then((data) => {
         binarySearch(data, juayHero)
-    })).then(() => {
-        console.log(juayHeroName + juayKills)
-        ctx.reply("<b>" + juayHeroName + "</b> \n" + "Kills: " + juayKills + "\n"
-            + "Deaths: " + juayDeaths + "\n"
-            + "Assists: " + juayAssists, {
-            parse_mode: 'HTML'
-        })
+    })
+    ctx.reply("<b>" + juayHeroName + "</b> \n" + "Kills: " + juayKills + "\n"
+        + "Deaths: " + juayDeaths + "\n"
+        + "Assists: " + juayAssists, {
+        parse_mode: 'HTML'
     })
 })
 
