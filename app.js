@@ -100,7 +100,9 @@ bot.on('text', async (ctx) => {
         ctx.reply(randomAnswer)
     }
     if (ctx.message.from.first_name == 'Brendan') {
-        ctx.reply('Nigga I know u u the bag thief! Im callin the cops!!')
+        let answerArray = ['Return me my bags bitch', 'Fuck u thief', 'Im callin the cops baggy u aint gettin away']
+        const randomAnswer = answerArray[Math.floor(Math.random() * answerArray.length)];
+        ctx.reply(randomAnswer)
     }
 })
 
