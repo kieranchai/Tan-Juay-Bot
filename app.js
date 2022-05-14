@@ -99,6 +99,9 @@ bot.on('text', async (ctx) => {
         const randomAnswer = answerArray[Math.floor(Math.random() * answerArray.length)];
         ctx.reply(randomAnswer)
     }
+    if (ctx.message.from.first_name == 'Brendan') {
+        ctx.reply('Nigga I know u u the bag thief! Im callin the cops!!')
+    }
 })
 
 bot.action('Last Match', async (ctx) =>
