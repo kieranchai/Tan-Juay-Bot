@@ -61,24 +61,23 @@ bot.command('/alarmNow', (ctx) => {
 
 })
 
-// bot.command('/alarmOn', (ctx) => {
-//     if (!task) {
-//         task = nodeCron.schedule('0 30 17 * * *', () => {
-//             ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
-//             ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
-//             // ctx.replyWithVoice({ source: `assets/alarm.ogg` })
-//             bot.telegram.sendVideoNote(ctx.message.chat.id, { source: `assets/alarm.mp4` })
-//         }, {
-//             scheduled: false,
-//             timezone: "Asia/Singapore"
-//         })
-//         ctx.reply('Game Alarm has been turned on.')
-//         task.start()
-//     } else {
-//         ctx.reply('Game Alarm has already been turned on.')
-//     }
-
-// })
+bot.command('/alarmOn', (ctx) => {
+    if (!task) {
+        task = nodeCron.schedule('0 30 17 * * *', () => {
+            ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+            ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+            // ctx.replyWithVoice({ source: `assets/alarm.ogg` })
+            bot.telegram.sendVideoNote(ctx.message.chat.id, { source: `assets/alarm.mp4` })
+        }, {
+            scheduled: false,
+            timezone: "Asia/Singapore"
+        })
+        ctx.reply('Game Alarm has been turned on.')
+        task.start()
+    } else {
+        ctx.reply('Game Alarm has already been turned on.')
+    }
+})
 
 bot.command('/alarmOff', (ctx) => {
     if (task) {
