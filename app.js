@@ -9,9 +9,18 @@ import nodeCron from 'node-cron'
 //VARIABLES
 let url = 'https://api.opendota.com/api/players/110236540/'
 const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
-let task
+// let task = undefined
 let taskNow
 let juayHeroName
+let task = nodeCron.schedule('0 30 17 * * *', () => {
+    ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+    ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+    bot.telegram.sendVideoNote(ctx.message.chat.id, { source: `assets/alarm.mp4` })
+}, {
+    scheduled: false,
+    timezone: "Asia/Singapore"
+})
+task.start()
 
 //FUNCTIONS
 function binarySearch(sortedArray, key) {
@@ -52,34 +61,34 @@ bot.command('/alarmNow', (ctx) => {
 
 })
 
-bot.command('/alarmOn', (ctx) => {
-    if (!task) {
-        task = nodeCron.schedule('0 30 17 * * *', () => {
-            ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
-            ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
-            // ctx.replyWithVoice({ source: `assets/alarm.ogg` })
-            bot.telegram.sendVideoNote(ctx.message.chat.id, { source: `assets/alarm.mp4` })
-        }, {
-            scheduled: false,
-            timezone: "Asia/Singapore"
-        })
-        ctx.reply('Game Alarm has been turned on.')
-        task.start()
-    } else {
-        ctx.reply('Game Alarm has already been turned on.')
-    }
+// bot.command('/alarmOn', (ctx) => {
+//     if (!task) {
+//         task = nodeCron.schedule('0 30 17 * * *', () => {
+//             ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+//             ctx.reply('🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+//             // ctx.replyWithVoice({ source: `assets/alarm.ogg` })
+//             bot.telegram.sendVideoNote(ctx.message.chat.id, { source: `assets/alarm.mp4` })
+//         }, {
+//             scheduled: false,
+//             timezone: "Asia/Singapore"
+//         })
+//         ctx.reply('Game Alarm has been turned on.')
+//         task.start()
+//     } else {
+//         ctx.reply('Game Alarm has already been turned on.')
+//     }
 
-})
+// })
 
-bot.command('/alarmOff', (ctx) => {
-    if (task) {
-        ctx.reply('Game Alarm has been turned off.')
-        task.stop()
-        task = undefined
-    } else {
-        ctx.reply('Game Alarm has not been turned on.')
-    }
-})
+// bot.command('/alarmOff', (ctx) => {
+//     if (task) {
+//         ctx.reply('Game Alarm has been turned off.')
+//         task.stop()
+//         task = undefined
+//     } else {
+//         ctx.reply('Game Alarm has not been turned on.')
+//     }
+// })
 
 bot.start((ctx) => {
     let userFirstName = ctx.message.from.first_name
