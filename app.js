@@ -80,15 +80,15 @@ bot.command('/alarmNow', (ctx) => {
 
 // })
 
-// bot.command('/alarmOff', (ctx) => {
-//     if (task) {
-//         ctx.reply('Game Alarm has been turned off.')
-//         task.stop()
-//         task = undefined
-//     } else {
-//         ctx.reply('Game Alarm has not been turned on.')
-//     }
-// })
+bot.command('/alarmOff', (ctx) => {
+    if (task) {
+        ctx.reply('Game Alarm has been turned off.')
+        task.stop()
+        task = undefined
+    } else {
+        ctx.reply('Game Alarm has not been turned on.')
+    }
+})
 
 bot.start((ctx) => {
     let userFirstName = ctx.message.from.first_name
