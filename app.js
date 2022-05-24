@@ -21,6 +21,10 @@ let task = nodeCron.schedule('0 30 17 * * *', () => {
     timezone: "Asia/Singapore"
 })
 task.start()
+bot.use(async (ctx) => {
+    console.log(`${ctx.message.chat.id}`)
+    return next()
+})
 
 //FUNCTIONS
 function binarySearch(sortedArray, key) {
