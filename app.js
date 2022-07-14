@@ -12,15 +12,15 @@ const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN)
 // let task = undefined
 let taskNow
 let juayHeroName
-let task = nodeCron.schedule('0 30 17 * * *', () => {
-    bot.telegram.sendMessage(-426185084, '🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
-    bot.telegram.sendMessage(-426185084, '🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
-    bot.telegram.sendVideoNote(-426185084, { source: `assets/alarm.mp4` })
-}, {
-    scheduled: false,
-    timezone: "Asia/Singapore"
-})
-task.start()
+// let task = nodeCron.schedule('0 30 17 * * *', () => {
+//     bot.telegram.sendMessage(-426185084, '🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+//     bot.telegram.sendMessage(-426185084, '🚨ATTENTION !!!!!!!!!!!!! 来骚 LAI SAO LIANG QUAN 两圈 !!!!!!!!!!!!!🚨')
+//     bot.telegram.sendVideoNote(-426185084, { source: `assets/alarm.mp4` })
+// }, {
+//     scheduled: false,
+//     timezone: "Asia/Singapore"
+// })
+// task.start()
 
 
 //FUNCTIONS
