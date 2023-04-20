@@ -104,7 +104,7 @@ bot.start((ctx) => {
 
 bot.on('text', async (ctx) => {
     if (((ctx.message.text).toLowerCase()).includes('play')) {
-        let answerArray = ['Ok play lo any niggins', 'Nah watchin anime', 'Maybe maybe not y dont u suck my dick first and well see']
+        let answerArray = ['Ok play lo any gamers?!!', 'Nah watchin anime', 'Maybe maybe not lolsss XD']
         const randomAnswer = answerArray[Math.floor(Math.random() * answerArray.length)];
         ctx.reply(randomAnswer)
     }
@@ -120,9 +120,9 @@ bot.action('Last Match', async (ctx) =>
         if (data[0].radiant_win == true && data[0].player_slot < 128) {
             juayResult = "won"
         } else if (data[0].radiant_win == true && data[0].player_slot >= 128) {
-            juayResult = "lost like a niggin noob"
+            juayResult = "lost like a friggin noob"
         } else if (data[0].radiant_win == false && data[0].player_slot < 128) {
-            juayResult = "lost like a niggin noob"
+            juayResult = "lost like a friggin noob"
         } else if (data[0].radiant_win == false && data[0].player_slot >= 128) {
             juayResult = "won"
         }
